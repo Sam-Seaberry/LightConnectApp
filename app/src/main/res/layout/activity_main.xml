@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D0000000">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Space
+                android:layout_width="51dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="222dp"
+                android:layout_height="37dp"
+                android:background="@drawable/style_spinner2"
+
+                android:spinnerMode="dropdown"
+
+                 />
+
+
+            <Space
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/simpleImageButton"
+                android:layout_width="71dp"
+                android:layout_height="match_parent"
+
+                android:background="@drawable/style_ble_spinner" />
+
+            <Space
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+
+
+        </LinearLayout>
+
+        <carbon.widget.FrameLayout
+            android:layout_width="match_parent"
+            android:id="@+id/framelay"
+            android:layout_height="594dp"
+            app:carbon_cornerRadius="50dp"
+            app:carbon_insetColor="@color/transparent"
+            app:carbon_elevationAmbientShadowColor="@color/purple_500"
+            app:carbon_elevationShadowColor="@color/purple_500"
+            app:carbon_strokeWidth="10dp"
+            app:carbon_touchMargin="2dp"
+
+            >
+
+            <carbon.widget.RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="579dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/style_large_glow"
+
+
+
+
+                >
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_alignParentRight="true"
+
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/colourwheel" />
+
+                <LinearLayout
+                    android:layout_width="155dp"
+                    android:layout_height="213dp"
+                    android:layout_alignStart="@id/imageView"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginEnd="17dp"
+                    android:layout_toStartOf="@+id/imageView"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textAlignment="center"
+
+                        android:layout_marginTop="40dp"
+                        android:textColor="@color/white"
+                        android:text="PRESETS" />
+
+                    <Spinner
+                        android:id="@+id/spinner2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/style_spinner2"
+                        android:layout_margin="10dp"
+
+                        android:spinnerMode="dropdown"
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_below="@id/imageView"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:id="@+id/display_colors"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="250dp"
+                        android:textColor="#CCCBCB"
+                        android:layout_marginBottom="5dp"
+                        android:text="RED" />
+
+                    <SeekBar
+                        android:id="@+id/seekBar"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:layout_marginBottom="10dp"
+                         />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="250dp"
+                        android:textColor="#CCCBCB"
+                        android:layout_marginBottom="5dp"
+                        android:text="GREEN" />
+
+                    <SeekBar
+                        android:id="@+id/seekBar2"
+                        android:layout_width="match_parent"
+                        android:max="255"
+                        android:layout_marginBottom="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="250dp"
+                        android:textColor="#CCCBCB"
+                        android:layout_marginBottom="5dp"
+                        android:text="BLUE" />
+
+                    <SeekBar
+                        android:id="@+id/seekBar3"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:layout_marginBottom="30dp"
+                        />
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="250dp"
+                        android:textColor="#CCCBCB"
+                        android:layout_marginBottom="5dp"
+                        android:text="BRIGHTNESS" />
+
+                    <SeekBar
+                        android:id="@+id/seekBar4"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:layout_marginBottom="20dp"
+                        />
+
+
+                </LinearLayout>
+
+
+
+
+            </carbon.widget.RelativeLayout>
+        </carbon.widget.FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/main"
+                android:text="Apply" />
+
+            <Space
+                android:layout_width="15dp"
+                android:layout_height="68dp"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/main"
+
+                android:text="Save" />
+
+            <Space
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
