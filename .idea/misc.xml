@@ -11,8 +11,14 @@
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable-xxhdpi/style_button.xml" value="0.5703125" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable-xxhdpi/style_large_glow.xml" value="0.5" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_ble_spinner.xml" value="0.5703125" />
+        <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_ble_spinner1.xml" value="0.39947916666666666" />
+        <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_ble_spinner_red.xml" value="0.4078125" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_glow_ble.xml" value="0.9" />
+        <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_green_ble_icon.xml" value="0.4046875" />
+        <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_spinner.xml" value="0.40520833333333334" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_spinner1.xml" value="0.42592592592592593" />
+        <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_spinner2.xml" value="0.4046875" />
+        <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_spinner_green.xml" value="0.4046875" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/ble_spinner.xml" value="0.3770833333333333" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/ble_spinner_dropdown.xml" value="0.3770833333333333" />

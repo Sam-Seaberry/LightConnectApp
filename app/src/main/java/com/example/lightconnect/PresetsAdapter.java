@@ -48,6 +48,7 @@ public class PresetsAdapter extends ArrayAdapter<String> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.presets_spinner, parent, false );
 
         }
+
         View Viewflag = convertView.findViewById(R.id.preset_colours);
         TextView TextViewflag = convertView.findViewById(R.id.textView6);
 
