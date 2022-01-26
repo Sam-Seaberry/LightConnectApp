@@ -162,10 +162,6 @@ public class ConnectedThread extends Thread {
     }
 
 
-    public void Connect(){
-        Thread thread = new Thread(runnable);
-        thread.start();
-    }
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
         try {
             final Method m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", UUID.class);
@@ -200,25 +196,7 @@ public class ConnectedThread extends Thread {
     }
 
 
-    Runnable runnable = new Runnable(){
-        public void run() {
-            mAdapter.cancelDiscovery();
 
-            try {
-                // Connect to the remote device through the socket. This call blocks
-                // until it succeeds or throws an exception.
-                mSocket.connect();
-            } catch (IOException connectException) {
-                // Unable to connect; close the socket and return.
-                try {
-                    mSocket.close();
-                } catch (IOException closeException) {
-                    Log.e(TAG, "Could not close the client socket", closeException);
-                }
-                return;
-            }//some code here
-        }
-    };
 
 
 }

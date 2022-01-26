@@ -39,8 +39,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +53,7 @@ import carbon.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener{
 
-    private final String TAG = MainActivity.class.getSimpleName();
 
-    private static final UUID BT_MODULE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
 
     // #defines for identifying shared types between calling functions
     private final static int REQUEST_ENABLE_BT = 1; // used to identify adding bluetooth names
@@ -96,8 +93,6 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     private BleAdapter mBLEAdapter;
 
     //BLE and other instances
-    private Button mDiscoverBtn;
-    private ListView mDevicesListView;
     private BluetoothAdapter mBTAdapter;
     private Set<BluetoothDevice> mPairedDevices;
     private ArrayAdapter<String> mBTArrayAdapter;
@@ -150,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         loadSpinnerData();
 
         mPresets.setAdapter(mAdapter);
+
+
         // Presets dropdown menu selection listener
         mPresets.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -184,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
         listPairedDevices();
         mBTArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //mBLEAdapter = new BleAdapter(this,mBLEData.devices,mBLEData.addresses);
+
 
 
         mSpinnerList.setAdapter(mBTArrayAdapter); // assign model to view
@@ -203,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
                     Toast.makeText(getBaseContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //mConnectedThread.cancel();
+
                 String info = ((TextView) view).getText().toString();//reading device name from sql spinner
                 if(info.isEmpty()){
                     Toast.makeText(getBaseContext(), "Bluetooth Device Not Selected", Toast.LENGTH_SHORT).show();
@@ -215,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
                 mConnectedThread = new ConnectedThread(mBTSocket,mHandler,mBTAdapter,address);
 
 
-                mConnectedThread.BTconnect();
+                mConnectedThread.BTconnect(); //connect selected device
 
 
                 if(mConnectedThread.isConnected()){
@@ -236,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         });
 
 
-        //ontouchlistener for the colorwheel so users can select a colour if their choice from the color wheel image
+        //colourwheel listener so users can select RGB colour option from image
         mColourWheel.setOnTouchListener((v, event) -> {
             if(event.getAction()== MotionEvent.ACTION_DOWN || event.getAction()== MotionEvent.ACTION_MOVE){
                 bitmap = mColourWheel.getDrawingCache();
@@ -289,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         else {
 
             mApplyButton.setOnClickListener(v -> {
-                String send = "1-"+red+"-2-"+green+"-3-"+blue+"-4-"+brightness;
+                String send = "1-"+red+"-2-"+green+"-3-"+blue+"-4-"+brightness; //this string is set so that when sent to a microcontroller running "Light Connect Micro" it can set each color value to the respecting pin
                 mConnectedThread.writeString(send);
             });
 
@@ -317,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
 
     private void setRGB(){
-
+        //setting the colour preview
         mColorView.setBackgroundColor(Color.rgb(red,green,blue));
         mFrame.setElevationShadowColor(Color.rgb(red,green,blue));
 
@@ -336,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
         }
     }
-
+    /*
     // Enter here after user selects "yes" or "no" to enabling radio
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent Data) {
@@ -352,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
             } else
                 Toast.makeText(getApplicationContext(),"Bluetooth turned Off", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
     private void bluetoothOff(){
         mBTAdapter.disable(); // turn off
@@ -428,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     }
 
 
-    private void addpresettolist(String name, int r, int g, int b){
+    private void addpresettolist(String name, int r, int g, int b){ //saves colour preset to SQLite
         mPresetList.add(new presets_items(name, r, g, b));
 
     }
@@ -446,25 +443,17 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
         Button savebtn = dialog.findViewById(R.id.savebtn);
         Log.v("EditText", mInputName.getText().toString());
-        savebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String presetname = mInputName.getText().toString();
-                addpresettolist(presetname,red, green, blue);
+        savebtn.setOnClickListener(v -> {
+            String presetname1 = mInputName.getText().toString();
+            addpresettolist(presetname1,red, green, blue);
 
-                mSQL.addNewPreset(presetname,red, green, blue,brightness);
+            mSQL.addNewPreset(presetname1,red, green, blue,brightness);
 
-                dialog.dismiss();
-            }
+            dialog.dismiss();
         });
 
         ImageView btnclose = dialog.findViewById(R.id.close_btn);
-        btnclose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        btnclose.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
 
     }
@@ -505,7 +494,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         List<String> labels = db.getPresetLabels();
 
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, labels);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, labels);
 
         mAdapter = new PresetsAdapter(this, labels);
 
