@@ -3,7 +3,10 @@ package com.example.lightconnect;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
@@ -37,11 +40,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.test.core.app.ApplicationProvider;
 
 import com.annimon.stream.operator.IntArray;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import kotlin.jvm.internal.markers.KMutableList;
 import kotlin.jvm.internal.markers.KMutableListIterator;
@@ -67,7 +74,7 @@ public class Bluetooth_Fragment extends Fragment {
     private BluetoothLeScanner mScanner;
 
     private ArrayAdapter<String> mBTArrayAdapter;
-    StringBuilder builder = new StringBuilder();
+    private List<String> mDeviceList;
     private final Map<String, BluetoothDevice> devices = new HashMap<>();
 
     protected Context context;
@@ -90,12 +97,30 @@ public class Bluetooth_Fragment extends Fragment {
         mBTSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(isScanning){
+                    stopBleScan();
+
+                }
+                String fail = "false";
+                String info = ((TextView) view).getText().toString();
+                if(getAddress(info).equals(fail)){
+                    return;
+                }
+
+                String address = getAddress(info);
+
+                connect(address);
+
+
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                startBleScan();
+                if(!isScanning){
+                    startBleScan();
+
+                }
             }
         });
 
@@ -117,7 +142,6 @@ public class Bluetooth_Fragment extends Fragment {
             }
         });
 
-        startBleScan();
 
         return view;
     }
@@ -153,7 +177,7 @@ public class Bluetooth_Fragment extends Fragment {
                 (BluetoothManager) requireActivity().getSystemService(Context.BLUETOOTH_SERVICE);
 
         bluetoothAdapter = bluetoothManager.getAdapter();
-
+        startBleScan();
     }
 
 
@@ -260,9 +284,12 @@ public class Bluetooth_Fragment extends Fragment {
 
                     return;
                 }else{
-                    mBTArrayAdapter.add(result.getDevice().getName());
-                    devices.put(device.getAddress(), device);
-                    builder.append(device.getName());
+                    String address = device.getAddress();
+                    String name = device.getName();
+                    mBTArrayAdapter.add(name);
+                    devices.put(address, device);
+                    mDeviceList.add(name+"/"+address);
+
                 }
             }
         };
@@ -275,6 +302,7 @@ public class Bluetooth_Fragment extends Fragment {
             requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION);
         }
         else {
+            mDeviceList = new ArrayList<>();
             mBTArrayAdapter.clear();
             mScanner.startScan(null, mScanSetting, scanCallback());
             mBTArrayAdapter.notifyDataSetChanged();
@@ -317,4 +345,48 @@ public class Bluetooth_Fragment extends Fragment {
         //mBluetoothStatus.setText("Bluetooth disabled");
 
     }
+
+    private String getAddress(String name){
+        for(int i=0;i< mDeviceList.size();i++){
+          String[] inter = mDeviceList.get(i).split("/");
+            if(inter[0].equals(name)){
+              return inter[1];
+          }
+        }
+        return "false";
+    }
+
+    public boolean connect(final String address) {
+        if (bluetoothAdapter == null || address == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
+            return false;
+        }
+
+        try {
+            final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
+            device.connectGatt(context,false,bluetoothGattCallback);
+        } catch (IllegalArgumentException exception) {
+            Log.w(TAG, "Device not found with provided address.");
+            return false;
+        }
+        return true;
+    }
+
+
+    private final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            if(status == BluetoothGatt.GATT_SUCCESS){
+                if (newState == BluetoothProfile.STATE_CONNECTED) {
+                    // successfully connected to the GATT Server
+                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                    gatt.close(); //connection failed
+                }
+            }else{
+                gatt.close(); //gatt failed
+            }
+
+        }
+    };
+
 }
