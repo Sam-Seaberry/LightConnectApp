@@ -1,10 +1,14 @@
 package com.example.lightconnect;
 
+import static android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT8;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -39,16 +43,21 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.annimon.stream.operator.IntArray;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
+
 
 import kotlin.jvm.internal.markers.KMutableList;
 import kotlin.jvm.internal.markers.KMutableListIterator;
@@ -63,15 +72,36 @@ public class Bluetooth_Fragment extends Fragment {
     private static final int REQUEST_ENABLE_BT = 3;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 4;
 
+    private static final String BleServiceUUID = "0000180a-0000-1000-8000-00805f9b34fb";
+    private static final String RedCharacteristicUUID = "00000001-0000-1000-8000-00805f9b34fb";
+    private static final String GreenCharacteristicUUID = "00000002-0000-1000-8000-00805f9b34fb";
+    private static final String BlueCharacteristicUUID = "00000003-0000-1000-8000-00805f9b34fb";
+
+    private int red,green,blue;
+
+    private boolean isInUse= false;
+
+    private static BluetoothGattCharacteristic RedCharacteristic;
+    private static BluetoothGattCharacteristic GreenCharacteristic;
+    private static BluetoothGattCharacteristic BlueCharacteristic;
+
+    private RGBvalues mRGB;
+
     private boolean isLocationPermissionGranted= false;
     private boolean isScanning = false;
+    private boolean isConnected = false;
 
     private ImageButton mBTButton ;
+    private Button mApplyButton;
     private Spinner mBTSpinner;
 
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothManager bluetoothManager;
     private BluetoothLeScanner mScanner;
+    private BluetoothGatt bluetoothGatt;
+
+    private ArrayList<BluetoothGattCharacteristic> mGattCharacteristics;
+    private ArrayList<BluetoothGattCharacteristic> mRGBCharacteristics;
 
     private ArrayAdapter<String> mBTArrayAdapter;
     private List<String> mDeviceList;
@@ -86,7 +116,13 @@ public class Bluetooth_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.ble_spinner_dropdown,container,false);
 
+        mGattCharacteristics = new ArrayList<>();
+        mRGBCharacteristics = new ArrayList<>();
+
+        mRGB = new RGBvalues();
+
         mBTButton =view.findViewById(R.id.simpleImageButton);
+        mApplyButton = view.findViewById(R.id.button3);
         mBTSpinner=view.findViewById(R.id.spinner1);
 
         mBTArrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item);
@@ -113,6 +149,7 @@ public class Bluetooth_Fragment extends Fragment {
 
 
 
+
             }
 
             @Override
@@ -123,6 +160,7 @@ public class Bluetooth_Fragment extends Fragment {
                 }
             }
         });
+
 
         mBTButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,11 +184,12 @@ public class Bluetooth_Fragment extends Fragment {
         return view;
     }
 
+
     private ScanSettings mScanSetting = new ScanSettings.Builder().setScanMode(
             ScanSettings.SCAN_MODE_LOW_LATENCY).build();
 
     private final ScanFilter mScanfilter = new ScanFilter.Builder().setServiceUuid(
-            ParcelUuid.fromString("19B10000-E8F2-537E-4F6C-D104768A1214")
+            ParcelUuid.fromString("0000180a-0000-1000-8000-00805f9b34fb")
     ).build();
 
 
@@ -265,7 +304,7 @@ public class Bluetooth_Fragment extends Fragment {
                                     LOCATION_PERMISSION_REQUEST_CODE
                             );
                             }
-                        });
+                        }).start();
                 }
             });
     private ScanCallback scanCallback() {
@@ -364,7 +403,7 @@ public class Bluetooth_Fragment extends Fragment {
 
         try {
             final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
-            device.connectGatt(context,false,bluetoothGattCallback);
+            bluetoothGatt = device.connectGatt(context,false,bluetoothGattCallback);
         } catch (IllegalArgumentException exception) {
             Log.w(TAG, "Device not found with provided address.");
             return false;
@@ -378,15 +417,141 @@ public class Bluetooth_Fragment extends Fragment {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if(status == BluetoothGatt.GATT_SUCCESS){
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
-                    // successfully connected to the GATT Server
+                    isConnected= true;
+                    bluetoothGatt.discoverServices();
+
+
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     gatt.close(); //connection failed
+                    isConnected = false;
                 }
             }else{
                 gatt.close(); //gatt failed
+                isConnected = false;
             }
 
         }
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt,int status){
+            FindGattCharacteristics(getSupportedGattServices());
+            readcharacteristic(gatt);
+        }
+
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt,
+                                         BluetoothGattCharacteristic characteristic,
+                                         int status){
+
+            if(characteristic.getUuid().toString().equalsIgnoreCase(RedCharacteristicUUID)){
+
+                mRGB.setRED(characteristic.getIntValue(FORMAT_UINT8,0));
+
+
+            }else if(characteristic.getUuid().toString().equalsIgnoreCase(GreenCharacteristicUUID)){
+
+                mRGB.setGREEN(characteristic.getIntValue(FORMAT_UINT8,0));
+
+
+            }else if(characteristic.getUuid().toString().equalsIgnoreCase(BlueCharacteristicUUID)) {
+
+                mRGB.setBLUE(characteristic.getIntValue(FORMAT_UINT8,0));
+
+            }
+
+            mGattCharacteristics.remove(mGattCharacteristics.get(mGattCharacteristics.size() - 1));
+
+            if (mGattCharacteristics.size() > 0) {
+                readcharacteristic(gatt);
+            }
+
+
+        }
+
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt,
+                                          BluetoothGattCharacteristic characteristic,
+                                          int status) {
+            if(characteristic.getUuid().toString().equalsIgnoreCase(RedCharacteristicUUID)){
+
+               // characteristic.setWriteType(FORMAT_UINT8);
+                characteristic.setValue(mRGB.tobyte(mRGB.getBLUE()));
+
+
+            }else if(characteristic.getUuid().toString().equalsIgnoreCase(GreenCharacteristicUUID)){
+
+                //characteristic.setWriteType(FORMAT_UINT8);
+                characteristic.setValue(mRGB.tobyte(mRGB.getRED()));
+
+            }else if(characteristic.getUuid().toString().equalsIgnoreCase(BlueCharacteristicUUID)) {
+
+                //characteristic.setWriteType(FORMAT_UINT8);
+                characteristic.setValue(mRGB.tobyte(mRGB.getGREEN()));
+
+            }
+
+            mRGBCharacteristics.remove(mRGBCharacteristics.get(mRGBCharacteristics.size() - 1));
+
+            if (mRGBCharacteristics.size() > 0) {
+                writecharacteristic();
+            }else{
+                FindGattCharacteristics(getSupportedGattServices());
+            }
+        }
+
     };
+
+
+    private void close() {
+        if (bluetoothGatt == null) {
+            return;
+        }
+        bluetoothGatt.close();
+        bluetoothGatt = null;
+    }
+
+    public List<BluetoothGattService> getSupportedGattServices() {
+        if (bluetoothGatt == null) return null;
+
+        return bluetoothGatt.getServices();
+    }
+
+
+    private void FindGattCharacteristics(List<BluetoothGattService> service){
+        for (int i = 0; i < service.size(); i++) {
+            BluetoothGattService gattService = service.get(i);
+            if(gattService.getUuid().toString().equalsIgnoreCase(BleServiceUUID)) {
+
+                RedCharacteristic = gattService.getCharacteristic(UUID.fromString(RedCharacteristicUUID));
+                GreenCharacteristic = gattService.getCharacteristic(UUID.fromString(GreenCharacteristicUUID));
+                BlueCharacteristic = gattService.getCharacteristic(UUID.fromString(BlueCharacteristicUUID));
+
+                mGattCharacteristics.add(RedCharacteristic);
+                mGattCharacteristics.add(GreenCharacteristic);
+                mGattCharacteristics.add(BlueCharacteristic);
+
+                mRGBCharacteristics.add(RedCharacteristic);
+                mRGBCharacteristics.add(GreenCharacteristic);
+                mRGBCharacteristics.add(BlueCharacteristic);
+
+
+
+                /*bluetoothGatt.setCharacteristicNotification(RedCharacteristic,true);
+                bluetoothGatt.setCharacteristicNotification(GreenCharacteristic,true);
+                bluetoothGatt.setCharacteristicNotification(BlueCharacteristic,true);*/
+            }
+        }
+
+    }
+
+    private void readcharacteristic(BluetoothGatt gatt)
+    {
+        gatt.readCharacteristic(mGattCharacteristics.get(mGattCharacteristics.size()-1));
+    }
+
+    public void writecharacteristic(){
+        bluetoothGatt.writeCharacteristic(mRGBCharacteristics.get(mRGBCharacteristics.size()-1));
+    }
+
 
 }
