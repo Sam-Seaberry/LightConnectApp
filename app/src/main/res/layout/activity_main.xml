@@ -18,52 +18,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView"
+            android:name="com.example.lightconnect.Bluetooth_Fragment"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="15dp"
-            android:orientation="horizontal"
+            android:layout_height="125dp"
 
-            app:layout_constraintTop_toTopOf="parent">
-
-            <Space
-                android:layout_width="51dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="222dp"
-                android:layout_height="37dp"
-                android:background="@drawable/style_spinner2"
-                android:layout_marginTop="5dp"
-                android:spinnerMode="dropdown"
-
-                 />
+            />
 
 
-            <Space
-                android:layout_width="75dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:id="@+id/simpleImageButton"
-                android:layout_width="71dp"
-                android:layout_height="match_parent"
-
-                android:background="@drawable/style_ble_spinner1" />
-
-            <Space
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-
-
-        </LinearLayout>
 
         <carbon.widget.FrameLayout
             android:layout_width="match_parent"
@@ -82,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="579dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/style_large_glow"
@@ -120,21 +84,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:textAlignment="center"
-
                         android:layout_marginTop="40dp"
-                        android:textColor="@color/white"
-                        android:text="PRESETS" />
+
+                        android:text="PRESETS"
+                        android:textAlignment="center"
+                        android:textColor="@color/white" />
 
                     <Spinner
                         android:id="@+id/spinner2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/style_spinner2"
                         android:layout_margin="10dp"
+                        android:background="@drawable/style_spinner2"
 
-                        android:spinnerMode="dropdown"
-                        />
+                        android:spinnerMode="dropdown" />
 
 
                 </LinearLayout>
@@ -175,6 +138,8 @@
                         android:layout_height="wrap_content"
                         android:max="255"
                         android:layout_marginBottom="10dp"
+                        android:thumb="@drawable/style_seekbar_thumb"
+                        android:progressTint="#FF0026"
                          />
 
                     <TextView
@@ -185,6 +150,7 @@
                         android:layout_marginRight="250dp"
                         android:textColor="#CCCBCB"
                         android:layout_marginBottom="5dp"
+
                         android:text="GREEN" />
 
                     <SeekBar
@@ -192,6 +158,8 @@
                         android:layout_width="match_parent"
                         android:max="255"
                         android:layout_marginBottom="10dp"
+                        android:thumb="@drawable/style_seekbar_thumb_green"
+                        android:progressTint="#4CFF00"
                         android:layout_height="wrap_content" />
 
                     <TextView
@@ -210,6 +178,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:max="255"
+                        android:thumb="@drawable/style_seekbar_thumb_blue"
+                        android:progressTint="#000DFF"
                         android:layout_marginBottom="30dp"
                         />
                     <TextView
@@ -219,6 +189,7 @@
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="250dp"
                         android:textColor="#CCCBCB"
+
                         android:layout_marginBottom="5dp"
                         android:text="BRIGHTNESS" />
 
@@ -244,18 +215,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:orientation="horizontal">
 
             <Space
-                android:layout_width="30dp"
+                android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <Button
                 android:id="@+id/button3"
-                android:layout_width="105dp"
-                android:layout_height="wrap_content"
+                android:layout_width="115dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/main"
                 android:text="Apply" />
@@ -268,15 +239,15 @@
 
             <Button
                 android:id="@+id/button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="115dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/main"
 
                 android:text="Save" />
 
             <Space
-                android:layout_width="30dp"
+                android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
         </LinearLayout>

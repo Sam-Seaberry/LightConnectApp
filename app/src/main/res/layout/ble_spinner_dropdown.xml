@@ -5,25 +5,44 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
-    <TextView
-        android:id="@android:id/text2"
-        style="?android:attr/spinnerItemStyle"
-        android:singleLine="true"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:ellipsize="marquee"
-        android:textAlignment="inherit"/>
 
 
-    <TextView
-            android:id="@+id/textView7"
+        <Space
+            android:layout_width="51dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="222dp"
+            android:layout_height="37dp"
+            android:background="@drawable/style_spinner2"
+            android:layout_margin="5dp"
+            android:spinnerMode="dropdown"
+
+            />
+
+
+        <Space
             android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:gravity="center|left"
-            android:ellipsize="marquee"
-            android:textAlignment="inherit" />
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/simpleImageButton"
+            android:layout_width="71dp"
+            android:layout_height="match_parent"
+
+            android:background="@drawable/style_ble_spinner1" />
+
+        <Space
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
 
     </LinearLayout>
