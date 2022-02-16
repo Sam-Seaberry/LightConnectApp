@@ -77,7 +77,7 @@ public class Bluetooth_Fragment extends Fragment {
     private static final String GreenCharacteristicUUID = "00000002-0000-1000-8000-00805f9b34fb";
     private static final String BlueCharacteristicUUID = "00000003-0000-1000-8000-00805f9b34fb";
 
-    private int red,green,blue;
+    private int mRED, mGREEN, mBLUE;
 
     private boolean isInUse= false;
 
@@ -475,25 +475,25 @@ public class Bluetooth_Fragment extends Fragment {
             if(characteristic.getUuid().toString().equalsIgnoreCase(RedCharacteristicUUID)){
 
                // characteristic.setWriteType(FORMAT_UINT8);
-                characteristic.setValue(mRGB.tobyte(mRGB.getBLUE()));
+                characteristic.setValue(mRGB.tobyte(mBLUE));
 
 
             }else if(characteristic.getUuid().toString().equalsIgnoreCase(GreenCharacteristicUUID)){
 
                 //characteristic.setWriteType(FORMAT_UINT8);
-                characteristic.setValue(mRGB.tobyte(mRGB.getRED()));
+                characteristic.setValue(mRGB.tobyte(mRED));
 
             }else if(characteristic.getUuid().toString().equalsIgnoreCase(BlueCharacteristicUUID)) {
 
                 //characteristic.setWriteType(FORMAT_UINT8);
-                characteristic.setValue(mRGB.tobyte(mRGB.getGREEN()));
+                characteristic.setValue(mRGB.tobyte(mGREEN));
 
             }
 
             mRGBCharacteristics.remove(mRGBCharacteristics.get(mRGBCharacteristics.size() - 1));
 
             if (mRGBCharacteristics.size() > 0) {
-                writecharacteristic();
+                writecharacteristic(mRED,mGREEN,mBLUE);
             }else{
                 FindGattCharacteristics(getSupportedGattServices());
             }
@@ -549,8 +549,14 @@ public class Bluetooth_Fragment extends Fragment {
         gatt.readCharacteristic(mGattCharacteristics.get(mGattCharacteristics.size()-1));
     }
 
-    public void writecharacteristic(){
-        bluetoothGatt.writeCharacteristic(mRGBCharacteristics.get(mRGBCharacteristics.size()-1));
+    public void writecharacteristic(int red, int green, int blue){
+        mRED = red;
+        mGREEN = green;
+        mBLUE = blue;
+        if(mRGBCharacteristics.size()>0){
+            bluetoothGatt.writeCharacteristic(mRGBCharacteristics.get(mRGBCharacteristics.size()-1));
+        }
+
     }
 
 

@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     private SQL_base mSQL;
     private FrameLayout mFrame;
 
+    Bluetooth_Fragment mFragment;
+
     private Handler mHandler;
 
 
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         blue = mRGB.getBLUE();
         green = mRGB.getGREEN();
 
-        Bluetooth_Fragment fragment = (Bluetooth_Fragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+        mFragment = (Bluetooth_Fragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
 
         //colorwheel
         mColourWheel = findViewById(R.id.imageView);
@@ -169,14 +171,18 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         mColourWheel.setOnTouchListener((v, event) -> {
             if(event.getAction()== MotionEvent.ACTION_DOWN || event.getAction()== MotionEvent.ACTION_MOVE){
                 bitmap = mColourWheel.getDrawingCache();
-                int pixels = bitmap.getPixel((int)event.getX(), (int)event.getY());
 
-                mRGB.setALL(Color.red(pixels), Color.green(pixels), Color.blue(pixels));
+                if((int)event.getX()<bitmap.getWidth() && (int)event.getY()<bitmap.getHeight()){
+                    int pixels = bitmap.getPixel((int)event.getX(), (int)event.getY());
+
+                    mRGB.setALL(Color.red(pixels), Color.green(pixels), Color.blue(pixels));
+                }
 
                 setBarValue();
 
                 mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
                 mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
+                notifyupdate();
             }
             return true;
         });
@@ -211,8 +217,8 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
 
         mApplyButton.setOnClickListener(v -> {
-            assert fragment != null;
-            fragment.writecharacteristic();
+            assert mFragment != null;
+            mFragment.writecharacteristic(mRGB.getRED(), mRGB.getGREEN(), mRGB.getBLUE());
         });
 
 
@@ -228,16 +234,25 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void notifyupdate(){
+        assert mFragment != null;
+        mFragment.writecharacteristic(mRGB.getRED(), mRGB.getGREEN(), mRGB.getBLUE());
+    }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setRGB(){
         //setting the colour preview
         mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
         mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
+        notifyupdate();
 
 
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         switch(seekBar.getId()){
@@ -258,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         }
         mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
         mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
+        notifyupdate();
     }
 
     @Override
@@ -315,6 +331,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
 
     //gets selected preset and extracts rgb values
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void getSQLdata(String selected){
         SQL_base mSQL = new SQL_base(this);
 
