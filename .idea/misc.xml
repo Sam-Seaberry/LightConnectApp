@@ -25,11 +25,13 @@
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_spinner2.xml" value="0.4046875" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_spinner_green.xml" value="0.4046875" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/drawable/style_splash_startup.xml" value="0.5703125" />
-        <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/activity_main_fragmented.xml" value="0.3662393162393162" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/activity_splash.xml" value="0.4547008547008547" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/ble_loader_dialog.xml" value="0.33" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/ble_spinner.xml" value="0.3770833333333333" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/ble_spinner_dropdown.xml" value="0.3770833333333333" />
+        <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/colorpicker_frag.xml" value="0.4547008547008547" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/preset_dialog.xml" value="0.4041666666666667" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/presets_spinner.xml" value="0.33" />
         <entry key="..\:/Users/seabe/AndroidStudioProjects/LightConnect/app/src/main/res/layout/startup.xml" value="0.5541666666666667" />
