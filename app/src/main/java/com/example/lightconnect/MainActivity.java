@@ -1,74 +1,51 @@
 package com.example.lightconnect;
-
-import android.Manifest;
 import android.annotation.SuppressLint;
-
-import android.app.Application;
-import android.app.Dialog;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
-import android.view.MotionEvent;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
 
 
-import carbon.widget.FrameLayout;
 
-
-public class MainActivity extends AppCompatActivity implements CallBackFragment{
+public class MainActivity extends AppCompatActivity implements CallBackFragment, FragmentChangeListener, CallBackDevices{
 
 
 
     // #defines for identifying shared types between calling functions
-    private final static int REQUEST_ENABLE_BT = 1; // used to identify adding bluetooth names
-    public final static int MESSAGE_READ = 2; // used in bluetooth handler to identify message update
+
+    public final static int MESSAGE_READ = 7; // used in bluetooth handler to identify message update
     private final static int CONNECTING_STATUS = 3; // used in bluetooth handler to identify message status
+    private final static int DEVICE_FRAG_CODE = 1;
+    private final static int COLOR_FRAG_CODE = 2;
 
     private RGBvalues mRGB;
 
+    private Button mColorButton;
+    private Button mDeviceButton;
 
-    Bluetooth_Fragment mBLEFragment;
-    ColorPickerFragment mColorFragment;
+    private FragmentTransaction mFragmentTrans;
+
+    private DeviceModel mDeviceList;
+
+
+    private Bluetooth_Fragment mBLEFragment;
+    private ColorPickerFragment mColorFragment;
+    private DeviceListFragment mDeviceFragment;
+    private FragmentManager mFragmentManager;
+    private CallBackFragment mCallback;
+    private CallBackDevices mCallbackDevices;
 
     private Handler mHandler;
 
@@ -81,11 +58,41 @@ public class MainActivity extends AppCompatActivity implements CallBackFragment{
 
         getSupportActionBar().hide();
 
+        mColorButton = findViewById(R.id.color_picker_button);
+        mDeviceButton = findViewById(R.id.device_frag_button);
 
-        mBLEFragment = (Bluetooth_Fragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
-        mColorFragment = (ColorPickerFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView2);
+        mDeviceList = new DeviceModel();
 
-        mColorFragment.setCallBackFragment(this);
+        mCallbackDevices = this;
+        mCallback = this;
+
+        setup();
+
+        mDeviceButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mDeviceFragment = new DeviceListFragment();
+                FragmentChangeListener fc=(FragmentChangeListener)MainActivity.this;
+                fc.replaceFragment(mDeviceFragment,"DeviceFragment");
+                mDeviceFragment.setCallBackDevices(mCallbackDevices);
+                //ChangeFrags(DEVICE_FRAG_CODE);
+
+            }
+        });
+
+        mColorButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                mColorFragment = new ColorPickerFragment();
+                FragmentChangeListener fc=(FragmentChangeListener)MainActivity.this;
+                fc.replaceFragment(mColorFragment,"ColorFragment");
+                mColorFragment.setCallBackFragment(mCallback);
+                //ChangeFrags(COLOR_FRAG_CODE);
+
+            }
+        });
 
         mRGB = new RGBvalues();
 
@@ -115,9 +122,49 @@ public class MainActivity extends AppCompatActivity implements CallBackFragment{
     @Override
     public void notifyupdate(){
         assert mBLEFragment != null;
-        mBLEFragment.writecharacteristic(mRGB.getRED(), mRGB.getGREEN(), mRGB.getBLUE());
+        mBLEFragment.writecharacteristic(mRGB.getRED(), mRGB.getGREEN(), mRGB.getBLUE(), mRGB.getBRIGHT());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void notifyswitch() {
+        assert mBLEFragment !=null;
+        mBLEFragment.switchDevices(mDeviceFragment.getSelectedDevice());
+    }
+
+
+    @Override
+    public void replaceFragment(Fragment fragment, String id) {
+        mFragmentTrans = getSupportFragmentManager().beginTransaction();
+        mFragmentTrans.replace(R.id.fragmentContainerView2,fragment,id);
+        mFragmentTrans.addToBackStack(id);
+        mFragmentTrans.commit();
+
+    }
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void setup(){
+        mBLEFragment = new Bluetooth_Fragment();
+        mFragmentTrans = getSupportFragmentManager().beginTransaction();
+        mFragmentTrans.replace(R.id.fragmentContainerView,mBLEFragment,"BLEFragment");
+        mFragmentTrans.addToBackStack("BLEFragment");
+        mFragmentTrans.commit();
+
+        mColorFragment = new ColorPickerFragment();
+        mFragmentTrans = getSupportFragmentManager().beginTransaction();
+        mFragmentTrans.replace(R.id.fragmentContainerView2,mColorFragment,"ColorsFragment");
+        mFragmentTrans.addToBackStack("ColorsFragment");
+        mFragmentTrans.commit();
+
+        mDeviceFragment = new DeviceListFragment();
+        mFragmentTrans = getSupportFragmentManager().beginTransaction();
+        mFragmentTrans.replace(R.id.fragmentContainerView2,mDeviceFragment,"DevicesFragment");
+        mDeviceFragment.setCallBackDevices(mCallbackDevices);
+        mFragmentTrans.addToBackStack("DevicesFragment");
+        mFragmentTrans.commit();
+    }
 
 
 

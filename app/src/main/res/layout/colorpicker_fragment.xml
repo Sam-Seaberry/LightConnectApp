@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <carbon.widget.FrameLayout
+        android:id="@+id/framelay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="-1dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:orientation="horizontal">
+
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PRESETS"
+                        android:textAlignment="center"
+                        android:layout_gravity="center"
+                        android:textColor="@color/black" />
+
+                    <Spinner
+                        android:id="@+id/spinner2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/style_spinner2"
+                        android:layout_gravity="center"
+                        android:spinnerMode="dropdown" />
+
+                    <ImageView
+                        android:id="@+id/button4"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:backgroundTint="@color/main"
+                        android:clickable="true"
+                        android:layout_gravity="center"
+                        android:src="@drawable/saveasset_2"
+
+                        />
+                </LinearLayout>
+
+                <include
+                    layout="@layout/vertical_spinners"
+                    android:layout_height="180dp"
+                    android:layout_width="220dp"
+
+
+                    />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal">
+
+
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+
+                    android:layout_marginBottom="10dp"
+
+                    android:src="@drawable/colourwheel" />
+
+                <ImageView
+                    android:id="@+id/button3"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_alignBottom="@id/imageView"
+                    android:layout_toRightOf="@id/imageView"
+                    android:backgroundTint="@color/main"
+                    android:clickable="true"
+                    android:src="@drawable/applyasset_1" />
+            </RelativeLayout>
+
+
+
+
+
+        </LinearLayout>
+    </carbon.widget.FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

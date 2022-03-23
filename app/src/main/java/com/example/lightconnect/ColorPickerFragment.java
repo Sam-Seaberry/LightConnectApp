@@ -1,6 +1,7 @@
 package com.example.lightconnect;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -66,24 +68,24 @@ public class ColorPickerFragment extends Fragment implements SeekBar.OnSeekBarCh
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.colorpicker_frag,container,false);
+        View view = inflater.inflate(R.layout.colorpicker_fragment,container,false);
 
         mColourWheel = view.findViewById(R.id.imageView);
-        mColorView = view.findViewById(R.id.display_colors);
+
         mColourWheel.setDrawingCacheEnabled(true);
         mColourWheel.buildDrawingCache(true);
 
-        mFrame = view.findViewById(R.id.framelay);
+        //mFrame = view.findViewById(R.id.framelay);
 
         mRGB = new RGBvalues();
 
         mSaveButton = view.findViewById(R.id.button4);
         mApplyButton = view.findViewById(R.id.button3);
 
-        mRed = view.findViewById(R.id.seekBar);
-        mGreen = view.findViewById(R.id.seekBar2);
-        mBlue = view.findViewById(R.id.seekBar3);
-        mBrightness = view.findViewById(R.id.seekBar4);
+        mRed = view.findViewById(R.id.redseek);
+        mGreen = view.findViewById(R.id.greenseek);
+        mBlue = view.findViewById(R.id.blueseek);
+
 
         mContext = container.getContext();
 
@@ -96,6 +98,7 @@ public class ColorPickerFragment extends Fragment implements SeekBar.OnSeekBarCh
 
         loadSpinnerData();
         mPresets.setAdapter(mAdapter);
+
 
         mPresets.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -110,8 +113,10 @@ public class ColorPickerFragment extends Fragment implements SeekBar.OnSeekBarCh
 
                 }
                 Toast.makeText(parent.getContext(), "You selected: " + label, Toast.LENGTH_LONG).show();
+                if(position > 0){
+                    getSQLdata(label);
+                }
 
-                getSQLdata(label);
 
             }
 
@@ -124,19 +129,23 @@ public class ColorPickerFragment extends Fragment implements SeekBar.OnSeekBarCh
         mColourWheel.setOnTouchListener((v, event) -> {
             if(event.getAction()== MotionEvent.ACTION_DOWN || event.getAction()== MotionEvent.ACTION_MOVE){
                 bitmap = mColourWheel.getDrawingCache();
+                if(event.getX()>=0 && event.getY()>=0){
+                    if((int)event.getX()<bitmap.getWidth() && (int)event.getY()<bitmap.getHeight()){
+                        int pixels = bitmap.getPixel((int)event.getX(), (int)event.getY());
 
-                if((int)event.getX()<bitmap.getWidth() && (int)event.getY()<bitmap.getHeight()){
-                    int pixels = bitmap.getPixel((int)event.getX(), (int)event.getY());
+                        mRGB.setALL(Color.red(pixels), Color.green(pixels), Color.blue(pixels));
+                    }
 
-                    mRGB.setALL(Color.red(pixels), Color.green(pixels), Color.blue(pixels));
+                    setBarValue();
+
+                    //mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
+                    //mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
+
+                    callBackFragment.notifyupdate();
+
+
                 }
 
-                setBarValue();
-
-                mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
-                mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
-
-                callBackFragment.notifyupdate();
 
 
             }
@@ -144,8 +153,8 @@ public class ColorPickerFragment extends Fragment implements SeekBar.OnSeekBarCh
         });
         mApplyButton.setOnTouchListener((v,event) ->{
             if(event.getAction()== MotionEvent.ACTION_DOWN || event.getAction()== MotionEvent.ACTION_BUTTON_PRESS) {
-                mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(), mRGB.getGREEN(), mRGB.getBLUE()));
-                mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(), mRGB.getGREEN(), mRGB.getBLUE()));
+                //mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(), mRGB.getGREEN(), mRGB.getBLUE()));
+                //mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(), mRGB.getGREEN(), mRGB.getBLUE()));
 
                 callBackFragment.notifyupdate();
             }
@@ -164,21 +173,19 @@ public class ColorPickerFragment extends Fragment implements SeekBar.OnSeekBarCh
     }
 
 
-
-
     private void setchangelister(){
         mRed.setOnSeekBarChangeListener(this);
         mGreen.setOnSeekBarChangeListener(this);
         mBlue.setOnSeekBarChangeListener(this);
-        mBrightness.setOnSeekBarChangeListener(this);
+        //mBrightness.setOnSeekBarChangeListener(this);
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setRGB(){
         //setting the colour preview
-        mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
-        mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
+        //mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
+        //mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
 
         callBackFragment.notifyupdate();
 
@@ -190,23 +197,20 @@ public class ColorPickerFragment extends Fragment implements SeekBar.OnSeekBarCh
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         switch(seekBar.getId()){
-            case R.id.seekBar:
+            case R.id.redseek:
                 mRGB.setRED(progress);
                 break;
-            case R.id.seekBar2:
+            case R.id.greenseek:
                 mRGB.setGREEN(progress);
                 break;
-            case R.id.seekBar3:
+            case R.id.blueseek:
                 mRGB.setBLUE(progress);
-                break;
-            case R.id.seekBar4:
-                brightness = progress;
                 break;
 
 
         }
-        mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
-        mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
+        //mColorView.setBackgroundColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
+        //mFrame.setElevationShadowColor(Color.rgb(mRGB.getRED(),mRGB.getGREEN(),mRGB.getBLUE()));
         callBackFragment.notifyupdate();
     }
 
@@ -260,7 +264,7 @@ public class ColorPickerFragment extends Fragment implements SeekBar.OnSeekBarCh
         mRed.setProgress(mRGB.getRED());
         mGreen.setProgress(mRGB.getGREEN());
         mBlue.setProgress(mRGB.getBLUE());
-        mBrightness.setProgress(brightness);
+        //mBrightness.setProgress(brightness);
     }
 
 
@@ -278,9 +282,10 @@ public class ColorPickerFragment extends Fragment implements SeekBar.OnSeekBarCh
             mRGB.setGREEN(cursor.getInt(2));
             mRGB.setBLUE(cursor.getInt(3));
             brightness = cursor.getInt(4);
+            setRGB();
+            setBarValue();
         }
-        setRGB();
-        setBarValue();
+
 
 
     }
@@ -301,7 +306,10 @@ public class ColorPickerFragment extends Fragment implements SeekBar.OnSeekBarCh
         mPresets.setAdapter(dataAdapter);
     }
     public void setCallBackFragment(CallBackFragment callBackFragment){
-        this.callBackFragment = callBackFragment;
+        if(!(callBackFragment==null)){
+            this.callBackFragment = callBackFragment;
+        }
+
     }
 
 

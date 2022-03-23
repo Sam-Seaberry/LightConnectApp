@@ -23,7 +23,6 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="25dp"
             android:layout_marginRight="15dp"
-            android:background="@drawable/style_large_glow"
 
 
             >
@@ -60,7 +59,7 @@
 
                     android:text="PRESETS"
                     android:textAlignment="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black" />
 
                 <Spinner
                     android:id="@+id/spinner2"

@@ -6,6 +6,7 @@ public class RGBvalues {
     private static int RED=0;
     private static int GREEN=0;
     private static int BLUE=0;
+    private static int BRIGHT=0;
     private static byte[] conversion= new byte[1];
 
     public int getRED(){
@@ -17,6 +18,9 @@ public class RGBvalues {
     public int getBLUE(){
         return BLUE;
     }
+    public int getBRIGHT(){
+        return BRIGHT;
+    }
 
     public void setRED(int red){
         RED = red;
@@ -26,6 +30,9 @@ public class RGBvalues {
     }
     public void setBLUE(int blue){
         BLUE = blue;
+    }
+    public void setBRIGHT(int bright){
+        BRIGHT = bright;
     }
     public void setALL(int red, int green, int blue){
         RED = red;

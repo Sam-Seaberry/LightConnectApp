@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="40dp"
+        >
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/CircularDeterminateProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:padding="1dp"
+            android:layout_centerInParent="true"
+            android:rotation="-45"
+            android:max="500" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/progress_bar"
+            android:layout_alignBottom="@id/progress_bar"
+            android:layout_alignStart="@id/progress_bar"
+            android:layout_alignEnd="@id/progress_bar"
+            android:layout_centerInParent="true"
+            android:background="@drawable/thumb"
+
+
+            android:padding="0dp" />
+
+        <View
+            android:id="@+id/referenceView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/progress_bar"
+            android:layout_alignTop="@id/progress_bar"
+            android:layout_alignEnd="@id/progress_bar"
+            android:layout_alignBottom="@id/progress_bar"
+
+
+            android:layout_centerInParent="true"
+            android:padding="0dp" />
+
+        <TextView
+            android:id="@+id/devicename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignTop="@id/progress_bar"
+            android:layout_alignStart="@id/progress_bar"
+            android:layout_alignEnd="@id/progress_bar"
+            android:gravity="center"
+            android:layout_marginTop="100dp"
+             android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:textSize="40dp"
+            android:text="Name" />
+
+        <Spinner
+            android:id="@+id/add_device_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+
+            />
+
+        <Button
+            android:id="@+id/add_device_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/ic_add"
+            android:backgroundTint="@color/black"
+            android:elevation="5dp"
+
+
+            />
+
+        <View
+            android:id="@+id/color_view"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:layout_alignTop="@id/progress_bar"
+            android:layout_alignStart="@id/progress_bar"
+            android:layout_alignEnd="@id/progress_bar"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="100dp"
+            android:gravity="center"
+            android:layout_marginTop="200dp"
+            />
+        <View
+            android:id="@+id/no_device_view"
+            android:layout_margin="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/progress_bar"
+            android:layout_alignStart="@id/progress_bar"
+            android:layout_alignEnd="@id/progress_bar"
+            android:background="@drawable/curved_corners"
+            android:layout_alignBottom="@id/progress_bar"
+            android:visibility="invisible"
+
+            />
+
+    </RelativeLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

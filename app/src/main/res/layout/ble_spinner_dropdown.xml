@@ -21,7 +21,7 @@
             android:layout_width="222dp"
             android:layout_height="37dp"
             android:background="@drawable/style_spinner2"
-            android:layout_margin="5dp"
+            android:layout_gravity="center"
             android:spinnerMode="dropdown"
 
             />
@@ -35,7 +35,7 @@
         <ImageButton
             android:id="@+id/simpleImageButton"
             android:layout_width="71dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
 
             android:background="@drawable/style_ble_spinner1" />
 
