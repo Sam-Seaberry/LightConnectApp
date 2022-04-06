@@ -7,14 +7,14 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <ListView
+    <carbon.widget.RecyclerView
         android:id="@+id/listViewProduct"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center">
 
 
-    </ListView>
+    </carbon.widget.RecyclerView>
 
 
 

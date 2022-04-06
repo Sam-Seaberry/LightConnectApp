@@ -24,16 +24,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import carbon.widget.RecyclerView;
+
 public class DeviceListFragment extends Fragment{
     private static final int VISIBLE = 0;
-    private ListView mListView;
+    private RecyclerView mListView;
 
     private String device;
 
@@ -55,7 +56,7 @@ public class DeviceListFragment extends Fragment{
 
         mListView = view.findViewById(R.id.listViewProduct);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.onIt(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 listViewProduct_onItemClick(adapterView, view, i, l);
@@ -77,6 +78,7 @@ public class DeviceListFragment extends Fragment{
                     mListView.setAdapter(mDeviceAdapter);
                 }
                 mDeviceAdapter.notifyDataSetChanged();
+
             }
         } );;
     }
@@ -99,4 +101,9 @@ public class DeviceListFragment extends Fragment{
         return device;
     }
 
+    public void changecolors(int red,int green,int blue){
+        if(mDeviceAdapter != null){
+            mDeviceAdapter.changecolor(red, green, blue);
+        }
+    }
 }

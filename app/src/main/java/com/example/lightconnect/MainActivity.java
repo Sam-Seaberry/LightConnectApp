@@ -122,7 +122,9 @@ public class MainActivity extends AppCompatActivity implements CallBackFragment,
     @Override
     public void notifyupdate(){
         assert mBLEFragment != null;
+        assert mDeviceFragment != null;
         mBLEFragment.writecharacteristic(mRGB.getRED(), mRGB.getGREEN(), mRGB.getBLUE(), mRGB.getBRIGHT());
+        //mDeviceFragment.changecolors(mRGB.getRED(), mRGB.getGREEN(), mRGB.getBLUE());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
