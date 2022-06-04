@@ -56,7 +56,7 @@ public class DeviceListFragment extends Fragment{
 
         mListView = view.findViewById(R.id.listViewProduct);
 
-        mListView.onIt(new AdapterView.OnItemClickListener() {
+        mListView.onItemClickListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 listViewProduct_onItemClick(adapterView, view, i, l);
