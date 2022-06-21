@@ -1,8 +1,32 @@
 # LightConnectApp
 ##This app is currently under developlment##
 
-Light Connect is intended to be used alongside and Arduino or ESP based microcontroller, that controls RGB lighting. 
-This app includes: a RGB color selecting platform with silders and a color wheel, customizable color presets that are saved
-in a MySQL database, and a bluetooth interface to transmit color codes to a selected device. 
+# Info  
+
+This app was created to be a RGB lightstrip color picker using Bluetooth Low Energy or Classic transmission. Accompanying the app is code for an Arduino or ESP based micro that enables the micro the connect and communicated in real time with the app.  For Bluetooth classic operation please use the initial commit (sorry about the UI). For BLE the most recent commit is correct.  
+
+# App Features  
+
+  ## Bluetooth 
+
+    BLE and Classic connection and communication  
+
+    Setup for finding devices with pre-defined service and characteristic UUID’s 
+
+    Read and write functions  
+
+    Interrupts  
+
+    Permission requests and handling 
+
+  ## MySQL 
+
+    MySQL non-volatile database  
+
+    Nested inside custom dropdown menu 
+
+    User defined table entries with name and RGB color code R, G, B (dynamically retrieved from the current color displaying on device) 
+
+ 
 
 
