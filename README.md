@@ -4,6 +4,11 @@
 # Info  
 
 This app was created to be a RGB lightstrip color picker using Bluetooth Low Energy or Classic transmission. Accompanying the app is code for an Arduino or ESP based micro that enables the micro the connect and communicated in real time with the app.  For Bluetooth classic operation please use the initial commit (sorry about the UI). For BLE the most recent commit is correct.  
+# Current UI Images
+
+![model](ble_options.PNG)
+![model](colorselect.PNG)
+
 
 # App Features  
 
